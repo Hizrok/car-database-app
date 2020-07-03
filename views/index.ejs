@@ -1,0 +1,58 @@
+<div class="container">
+    <h2>Search for a car brand...</h2>
+    <div style="display: flex; justify-content: space-between;">
+        <form class="form-inline" action="/" method="GET">
+            <input type="text" name="search" class="form-control" value="<%= search %>" placeholder="f.e.: Ford">
+            <button type="submit" class="btn btn-primary">SEARCH</button>              
+        </form>
+        <div style="display: flex;">
+            <a href="/?search=&page=1" class="btn btn-success">BACK TO ALL</a>
+            <a href="/new" class="btn btn-primary">CREATE NEW</a>
+        </div>        
+    </div>    
+    <% if (search == '') { %>
+        <h3>Search result for all cars</h3>  
+    <% } else { %>    
+        <h3>Search result for '<%= search %>'</h3>  
+    <% } %>
+    <% if (cars.length > 0) { %> 
+        <table class="table">
+            <tr>
+                <th>BRAND</th>
+                <th>MODEL</th>
+                <th>YEAR</th>
+                <th>VIN</th>
+                <th>EDIT AND DELETE</th>
+            </tr>        
+            <% cars.forEach(result => { %>
+                <tr>            
+                    <td><%= result.car_brand %></td>
+                    <td><%= result.car_model %></td>
+                    <td><%= result.car_model_year %></td>
+                    <td><%= result.car_vin %></td>
+                    <td>
+                        <div style="display: flex; justify-content: center;">
+                            <a href="/edit/<%= result.id %>" class="btn btn-primary">EDIT</a>
+                            <form action="/delete/<%= result.id %>" method="POST">
+                                <button type="submit" class="btn btn-danger" id="delete">DELETE</button>
+                            </form>
+                        </div>                                        
+                    </td>
+                </tr>
+            <% }); %>                     
+        </table>  
+        <div style="display: flex; justify-content: space-between;">
+            <a href="/?search=<%= search %>&page=<% if (currentPage-1 == 0){ %>1<% }else { %><%= currentPage-1 %><% } %>" class="btn btn-primary">PREVIOUS PAGE</a>
+            <div>
+                <% for (let i = 0; i < pages; i++) { %>
+                    <a href="/?search=<%= search %>&page=<%= i+1 %>" class="page"><%= i+1 %></a>            
+                <% } %>
+            </div>        
+            <a href="/?search=<%= search %>&page=<% if (currentPage+1 == pages+1){ %><%= pages %><% }else { %><%= currentPage+1 %><% } %>" class="btn btn-primary">NEXT PAGE</a>
+        </div>  
+    <% } else { %>
+        <div style="width: 100%; text-align: center;">
+            <h2>No data found...</h2>
+        </div>
+    <% } %>
+</div>
